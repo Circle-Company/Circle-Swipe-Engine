@@ -1,0 +1,37 @@
+{
+    "user_interaction": {
+        "viewed_moments": {
+            "period": 86400,
+            "data": [
+                {
+                    "id": 1,
+                    "tags": ["cars", "lamborghini", "race"],
+                    "duration": 3.3,
+                    "type": "video",
+                    "interactions": {
+                        "liked": 1,
+                        "like_time": 1.230,
+                        "num_of_views": 2.1,
+                        "total_view_time": 3.221,
+                        "num_of_comments": 0,
+                        "shared": 0         
+                    }
+                },
+                {
+                    "id": 1,
+                    "tags": ["bitcoin", "podcast", "finances", "money", "investment"],
+                    "duration": 10.3,
+                    "type": "video",
+                    "interactions": {
+                        "liked": 1,
+                        "like_time": 1.230,
+                        "num_of_views": 2.1,
+                        "total_view_time": 3.221,
+                        "num_of_comments": 0,
+                        "shared": 1         
+                    }
+                }
+            ]
+        }
+    }
+}

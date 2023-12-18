@@ -1,0 +1,25 @@
+[
+    {
+        "moment_id": 1,
+        "user_id": 2,
+        "interaction": {
+            "like": true,
+            "share": false,
+            "click_into_moment": false,
+            "watch_time": 2.1,
+            "click_profile": false,
+            "comment": false,
+            "like_comment": false,
+            "pass_to_next": false,
+            "show_less_often": true,
+            "report": true
+        },
+        "informations": {
+            "tags": ["cars", "lamborghini", "race"],
+            "duration": 10,
+            "type": "video",
+            "language": "pt-br",
+            "country": "Brazil"
+        }
+    }
+]
