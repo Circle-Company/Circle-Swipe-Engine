@@ -1,9 +1,8 @@
 import express from "express"
 import { StatusCodes } from "http-status-codes"
-import "dotenv/config"
-
 import swipeEngineRouter from "../routes/route-swipe_engine"
-
+import '../../database/index'
+    
 const app = express()
 app.use(express.json())
 app.use(
@@ -20,6 +19,6 @@ app.use((err: any, res: any) => {
         message: "Internal Server Error"
     })
 })
-const port = process.env.PORT || 5000
+const port = 5000
 
-app.listen(port, () => console.log(`swipe-engine (server) - running on port ${process.env.PORT || 5000}`))
+app.listen(port, () => console.log(`swipe-engine (server) - running on port ${port}`))
