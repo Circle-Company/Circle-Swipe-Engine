@@ -16,14 +16,16 @@ function groupScoresById(tagsScores) {
 }
 
 function calculateAverageScores(groupedScores) {
-    const averagedScores = {};
+    const averagedScores: {tag_id: number, weight: number}[] = [];
     
     Object.keys(groupedScores).forEach(id => {
         const scores = groupedScores[id];
         const sum = scores.reduce((acc, curr) => acc + curr.score, 0);
         const average = sum / scores.length;
-        averagedScores[id] = average;
+        averagedScores.push({ tag_id: Number(id), weight: average });
     });
+
+    console.log(averagedScores);
     
     return averagedScores;
 }
