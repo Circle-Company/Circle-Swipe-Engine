@@ -4,7 +4,7 @@ interface Tag { id: number, name: string }
 
 const MAX_DURATION = 60 * 1000 // 60 seconds
 
-function encodeContentType(type: string): number[]{
+export function encodeContentType(type: string): number[]{
     const types = ["IMAGE", "VIDEO"] // Lista de tipos de conteúdo
     const encoded = Array(types.length).fill(0) // Vetor de zeros inicial
     const index = types.indexOf(type) // Índice do tipo de conteúdo
@@ -12,12 +12,12 @@ function encodeContentType(type: string): number[]{
     return encoded;    
 }
 
-function normalizeDuration(duration: number): number {
+export function normalizeDuration(duration: number): number {
     if(duration == 0) return 1
     else return duration / MAX_DURATION
 }
 
-function encodeLanguage(language: string): number[] {
+export function encodeLanguage(language: string): number[] {
     const languages = ["pt-br", "en-us", "es-es"] // Lista de idiomas
     const encoded = Array(languages.length).fill(0) // Vetor de zeros inicial
     const index = languages.indexOf(language) // Índice do idioma
@@ -25,7 +25,7 @@ function encodeLanguage(language: string): number[] {
     return encoded;
 }
 
-function normalizeWatchTime(watchTime: number, duration: number): number {
+export function normalizeWatchTime(watchTime: number, duration: number): number {
     if(duration == 0) return watchTime
     else return watchTime / duration
 }
