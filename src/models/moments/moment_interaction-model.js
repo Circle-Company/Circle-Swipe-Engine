@@ -16,7 +16,8 @@ class MomentInteraction extends Model {
             pass_to_next: DataTypes.BOOLEAN,
             show_less_often: DataTypes.BOOLEAN,
             report: DataTypes.BOOLEAN,
-            interaction_rate: DataTypes.BOOLEAN,
+            negative_interaction_rate: DataTypes.FLOAT,
+            positive_interaction_rate: DataTypes.FLOAT,
         }, {
             sequelize,
             modelName: 'MomentInteraction',

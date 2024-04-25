@@ -4,7 +4,7 @@ import {Modules_Controller} from '../../modules/modules-controller'
 import MomentInteraction from '../../models/moments/moment_interaction-model.js'
 import { InternalServerError } from '../../errors'
 import { normalizeWatchTime } from '../../modules/pre-processing'
-import { calcule_one_interaction_rate, interaction_rate } from '../../modules/interaction_rate'
+import { calcule_one_negative_interaction_rate, calcule_one_positive_interaction_rate, positive_interaction_rate } from '../../modules/positive_interaction_rate'
 
 
 export async function getMoments(req:Request, res:Response){
@@ -34,7 +34,8 @@ export async function storeMomentInteraction(req: Request, res: Response){
             moment_owner_id,
             moment_id,
             ...interaction,
-            interaction_rate: calcule_one_interaction_rate(processed_interaction),
+            negative_interaction_rate: calcule_one_negative_interaction_rate(processed_interaction),
+            positive_interaction_rate: calcule_one_positive_interaction_rate(processed_interaction),
             created_at: new Date(),
             updated_at: new Date()
         })

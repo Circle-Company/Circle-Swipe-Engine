@@ -2,7 +2,7 @@
     "like": { "weight": 1 },
     "share": { "weight": 3 },
     "click_into_moment": { "weight": 5 },
-    "watch_time": { "weight": 8 },
+    "watch_time": { "weight": 10 },
     "click_profile": { "weight": 2 },
     "comment": { "weight": 5 },
     "like_comment": { "weight": 1.5 },
