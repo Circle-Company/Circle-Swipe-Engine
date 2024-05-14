@@ -4,7 +4,7 @@ class View extends Model {
     static init(sequelize) {
         super.init({
             user_id: DataTypes.INTEGER(),
-            liked_moment_id: DataTypes.INTEGER(),
+            viewed_moment_id: DataTypes.INTEGER(),
         },      {
             sequelize,
             modelName: 'View',

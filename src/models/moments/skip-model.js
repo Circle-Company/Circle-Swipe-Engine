@@ -4,7 +4,7 @@ class Skip extends Model {
     static init(sequelize) {
         super.init({
             user_id: DataTypes.INTEGER(),
-            liked_moment_id: DataTypes.INTEGER(),
+            skipped_moment_id: DataTypes.INTEGER(),
         },      {
             sequelize,
             modelName: 'Skip',
