@@ -9,38 +9,35 @@ export default async function findPosts() {
         const tags = await MomentTags.findAll({
             attributes: ['tag_id'],
             where: { moment_id: post.id }
-        });
+        })
         const tagIds = tags.map((tag) => tag.tag_id)
         return { moment_id: post.id, tags_ids: tagIds }
-    }));
+    }))
 
     // Identificar todas as tags únicas
-    const uniqueTags = Array.from(new Set(postTags.flatMap(postTag => postTag.tags_ids)));
+    const uniqueTags = Array.from(new Set(postTags.flatMap(postTag => postTag.tags_ids)))
 
     // Criar a matriz de ocorrências
     const occurrenceMatrix = postTags.map(postTag => {
-        const vector = uniqueTags.map(tagId => (postTag.tags_ids.includes(tagId) ? 1 : 0));
-        return { moment_id: postTag.moment_id, vector };
-    });
+        const vector = uniqueTags.map(tagId => (postTag.tags_ids.includes(tagId) ? 1 : 0))
+        return { moment_id: postTag.moment_id, vector }
+    })
 
     // Calcular a similaridade de cosseno
     const similarityMatrix: any = [];
-    const momentIds = occurrenceMatrix.map(post => post.moment_id); // IDs dos momentos
+    const momentIds = occurrenceMatrix.map(post => post.moment_id)
     for (let i = 0; i < occurrenceMatrix.length; i++) {
-        const row: any = [];
+        const row: any = []
         for (let j = 0; j < occurrenceMatrix.length; j++) {
-            const similarity = cosineSimilarity(occurrenceMatrix[i].vector, occurrenceMatrix[j].vector);
-            row.push(similarity);
+            const similarity = cosineSimilarity(occurrenceMatrix[i].vector, occurrenceMatrix[j].vector)
+            row.push(similarity)
         }
-        similarityMatrix.push(row);
+        similarityMatrix.push(row)
     }
 
     // Mapear os IDs dos momentos para os índices da matriz
-    const momentIndices = {};
-    momentIds.forEach((momentId, index) => {
-        momentIndices[momentId] = index;
-    });
+    let momentIndices = {}
+    momentIds.forEach((momentId, index) => { momentIndices[momentId] = index })
 
-    // Retornar a matriz de similaridade e o mapeamento de IDs de momentos para índices
-    return [ similarityMatrix, momentIndices ]
+    return similarityMatrix
 }
