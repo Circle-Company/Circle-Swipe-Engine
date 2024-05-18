@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize')
 
 class MomentInteraction extends Model {
     static init(sequelize) {
