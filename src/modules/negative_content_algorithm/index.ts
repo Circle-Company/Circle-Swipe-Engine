@@ -1,11 +1,10 @@
-import Interaction from '../../models/moments/moment_interaction-model.js'
-import { InteractionQueueProps } from "../types"
+import Interaction from '../../models/moments/moment_interaction-model.js';
+import { InteractionQueueProps } from "../types";
 
 type NegativeContentAlgorithmProps = {
-    users_similarity: Array<Array<number>>
-    interaction_queue: InteractionQueueProps
-}
-
+    users_similarity: Array<Array<number>>;
+    interaction_queue: InteractionQueueProps;
+};
 
 export default async function negative_content_algorithm({
     users_similarity, interaction_queue
@@ -27,11 +26,11 @@ export default async function negative_content_algorithm({
     const similarUsersInteractions = await Promise.all(
         similarUsers.map(async(user) => {
             return await Interaction.findAll({
-            where:{user_id: user.user_id},
-            attributes: ['negative_interaction_rate', 'user_id', 'moment_id']
-            }) 
-        }) 
-    )
+                where: { user_id: user.user_id },
+                attributes: ['negative_interaction_rate', 'user_id', 'moment_id']
+            });
+        })
+    );
 
     const allInteractions = similarUsersInteractions.flat();
 
@@ -57,7 +56,7 @@ export default async function negative_content_algorithm({
         };
     });
 
-
+    // Agrupar por moment_id e adicionar similaridade
     const groupedByMomentId: { [key: number]: { user_id: number, negative_interaction_rate_average: number, similarity: number }[] } = {};
 
     averagedInteractions.forEach(interaction => {
@@ -65,19 +64,26 @@ export default async function negative_content_algorithm({
         if (!groupedByMomentId[moment_id]) {
             groupedByMomentId[moment_id] = [];
         }
-        const user_similarity = similarUsers.map((item) => {if(item.user_id == interaction.user_id) return item.similarity;else return 0 })
-        groupedByMomentId[moment_id].push({ user_id, negative_interaction_rate_average, similarity: Number(user_similarity)});
+        const user_similarity = similarUsers.find(item => item.user_id === user_id)?.similarity || 0;
+        groupedByMomentId[moment_id].push({ user_id, negative_interaction_rate_average, similarity: user_similarity });
     });
 
     // Transformar em um array de GroupedInteractions
-    const result = Object.entries(groupedByMomentId).map(([moment_id, interactions]) => ({
+    const momentsInteractions = Object.entries(groupedByMomentId).map(([moment_id, interactions]) => ({
         moment_id: Number(moment_id),
         interactions
     }));
 
     // Ordenar pelo moment_id
-    result.sort((a, b) => a.moment_id - b.moment_id);
+    momentsInteractions.sort((a, b) => a.moment_id - b.moment_id)
 
-    return [{similarUsersInteractions}, {result}]
 
+    const scoredMoments = momentsInteractions.map((moment) => {
+        const scores = moment.interactions.map((interaction) => {
+            return interaction.similarity * interaction.negative_interaction_rate_average;
+        });
+        const score = scores.reduce((acc, val) => acc + val, 0) / scores.length;
+        return { moment_id: moment.moment_id, score };
+    });
+    return [{ similarUsersInteractions }, { momentsInteractions }, {scoredMoments}];
 }
