@@ -88,7 +88,7 @@ export default async function negative_content_algorithm({
 
     const momentIdWithHighestScore = scoredMoments.reduce((max, moment) => {
         return (moment.score > max.score) ? moment : max;
-    });
+    }).moment_id;
 
     return momentIdWithHighestScore;
 }
