@@ -10,10 +10,10 @@ export default async function negative_content_algorithm({
     users_similarity, interaction_queue
 }: NegativeContentAlgorithmProps): Promise<any> {
     // Ajustar o índice para zero-based
-    const zeroBasedIndex = interaction_queue.user_id - 1;
+    const zeroIndex = interaction_queue.user_id - 1;
 
     // Obter a linha de similaridade para o usuário especificado
-    const userSimilarities = users_similarity[zeroBasedIndex];
+    const userSimilarities = users_similarity[zeroIndex];
 
     // Criar uma lista de pares (usuário, similaridade), excluindo a similaridade do usuário consigo mesmo
     const similarUsers = userSimilarities
