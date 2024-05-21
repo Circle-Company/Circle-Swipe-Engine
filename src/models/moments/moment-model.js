@@ -11,6 +11,20 @@ class Moment extends Model {
             sequelize,
             tableName: 'moments'
         })
+
+        const createIndexOnCreatedAt = async () => {
+            // Verifique se o índice já existe
+            const [result] = await sequelize.query(`
+                SHOW INDEX FROM moments WHERE Key_name = 'index_created_at';
+            `);
+        
+            // Se o índice não existe, crie-o
+            if (result.length === 0) {
+                await sequelize.query(`
+                    ALTER TABLE moments ADD INDEX index_created_at (created_at);
+                `);
+            }
+        }; createIndexOnCreatedAt()
     }
 
     static associate(models){
