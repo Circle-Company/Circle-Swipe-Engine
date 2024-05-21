@@ -3,7 +3,6 @@ export interface GenerateRecommendationsProps {
 }
 
 export interface InteractionQueueProps {
-    [x: string]: any
     user_id: number,
     length: number,
     period: number,
