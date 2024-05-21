@@ -3,14 +3,14 @@ import { InteractionQueueProps } from "../types"
 
 type NegativeContentAlgorithmProps = {
     users_similarity: Array<Array<number>>
-    interaction: InteractionQueueProps
+    interaction_queue: InteractionQueueProps
 }
 
 export default async function negative_content_algorithm({
-    users_similarity, interaction
+    users_similarity, interaction_queue
 }: NegativeContentAlgorithmProps): Promise<any> {
     // Ajustar o índice para zero-based
-    const zeroIndex = interaction.user_id - 1
+    const zeroIndex = interaction_queue.user_id - 1
 
     // Obter a linha de similaridade para o usuário especificado
     const userSimilarities = users_similarity[zeroIndex]
@@ -18,7 +18,7 @@ export default async function negative_content_algorithm({
     // Criar uma lista de pares (usuário, similaridade), excluindo a similaridade do usuário consigo mesmo
     const similarUsers = userSimilarities
         .map((similarity, index) => ({ user_id: index + 1, similarity })) // Ajustar o índice para começar em 1
-        .filter(pair => pair.user_id !== interaction.user_id) // Excluir a similaridade do usuário consigo mesmo
+        .filter(pair => pair.user_id !== interaction_queue.user_id) // Excluir a similaridade do usuário consigo mesmo
 
     // Ordenar a lista pela similaridade em ordem decrescente
     similarUsers.sort((a, b) => b.similarity - a.similarity)

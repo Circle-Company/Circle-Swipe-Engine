@@ -10,15 +10,15 @@ import negative_content_algorithm from './negative_content_algorithm'
 import cold_start_algorithm from './cold_start'
 
 type ModuleControllerProps = { 
-    interaction: InteractionQueueProps
+    interaction_queue: InteractionQueueProps
 }
-export async function Modules_Controller({interaction}:ModuleControllerProps) {
+export async function Modules_Controller({interaction_queue}:ModuleControllerProps) {
     let coldStartMode: boolean
     let userHasInteractions: boolean
 
-    if(interaction.data) {
+    if(interaction_queue.data) {
         const userInteractions = MomentInteraction.findOne({
-            where: {user_id: interaction.user_id},
+            where: {user_id: interaction_queue.user_id},
         })         
         coldStartMode = false
         userHasInteractions = userInteractions? true : false
@@ -28,17 +28,17 @@ export async function Modules_Controller({interaction}:ModuleControllerProps) {
     if(coldStartMode) return await cold_start_algorithm()
     else {
         const calculated_similarities = await calculate_similarities()
-        const processed_interactions = await pre_processing(interaction)
+        const processed_interactions = await pre_processing(interaction_queue)
         const aditional_features = await positive_interaction_rate(processed_interactions)
         const tags_with_weights = await calculeTagsWeight(processed_interactions, aditional_features)
         const posts_from_tags = await interaction_tags_algorithm({
             tags_with_weights,
             users_similarity: calculated_similarities.users_similarity,
-            interaction
+            interaction_queue
         })
         const negative_post = await negative_content_algorithm({
             users_similarity: calculated_similarities.users_similarity,
-            interaction
+            interaction_queue
         }) 
 
         return [posts_from_tags, negative_post]
