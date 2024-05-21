@@ -85,5 +85,11 @@ export default async function negative_content_algorithm({
         const score = scores.reduce((acc, val) => acc + val, 0) / scores.length;
         return { moment_id: moment.moment_id, score };
     });
-    return [{ similarUsersInteractions }, { momentsInteractions }, {scoredMoments}];
+    
+    const momentIdWithHighestScore = await negative_content_algorithm({
+        users_similarity,
+        interaction_queue
+    })
+
+    return momentIdWithHighestScore;
 }
