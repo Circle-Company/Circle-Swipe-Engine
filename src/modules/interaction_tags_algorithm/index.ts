@@ -12,17 +12,17 @@ type tagWeight = {
 type InteractionTagsAlgorithmProps = {
     tags_with_weights: tagWeight[], 
     users_similarity: any,
-    interaction_queue: InteractionQueueProps
+    interaction: InteractionQueueProps
 }
 
 export default async function interaction_tags_algorithm({
     tags_with_weights,
     users_similarity,
-    interaction_queue
+    interaction
 }: InteractionTagsAlgorithmProps): Promise<number | null> {
 
     let maxWeightTag: tagWeight | undefined
-    let user_id: number = interaction_queue.user_id
+    let user_id: number = interaction.user_id
     let highestScoreMoment: { moment_id: number, score: number } | undefined
 
     // Percorre o array de tags e retorna a tag com maior peso
