@@ -24,8 +24,6 @@ function calculateAverageScores(groupedScores) {
         const average = sum / scores.length;
         averagedScores.push({ tag_id: Number(id), weight: average });
     });
-
-    console.log(averagedScores);
     
     return averagedScores;
 }
