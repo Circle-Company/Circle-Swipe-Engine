@@ -24,13 +24,13 @@ export default async function findPosts() {
     })
 
     // Calcular a similaridade de cosseno
-    const similarityMatrix: any = [];
+    const similarityMatrix: any = [];   
     const momentIds = occurrenceMatrix.map(post => post.moment_id)
     for (let i = 0; i < occurrenceMatrix.length; i++) {
         const row: any = []
         for (let j = 0; j < occurrenceMatrix.length; j++) {
             const similarity = cosineSimilarity(occurrenceMatrix[i].vector, occurrenceMatrix[j].vector)
-            row.push(similarity)
+            row.push(Number(similarity.toFixed(4)))
         }
         similarityMatrix.push(row)
     }
@@ -38,6 +38,5 @@ export default async function findPosts() {
     // Mapear os IDs dos momentos para os índices da matriz
     let momentIndices = {}
     momentIds.forEach((momentId, index) => { momentIndices[momentId] = index })
-
     return similarityMatrix
 }
