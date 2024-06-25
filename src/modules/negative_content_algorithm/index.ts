@@ -72,12 +72,15 @@ export default async function negative_content_algorithm({
     const groupedByMomentId: { [key: number]: { user_id: number, negative_interaction_rate_average: number, similarity: number }[] } = {}
 
     averagedInteractions.forEach(interaction => {
-        const { moment_id, user_id, negative_interaction_rate_average } = interaction
-        if (!groupedByMomentId[moment_id]) groupedByMomentId[moment_id] = []
-        const user_similarity = similarUsers.find(item => item.user_id === user_id)?.similarity || 0
-        groupedByMomentId[moment_id].push({ user_id, negative_interaction_rate_average, similarity: user_similarity })
-    })
+        if(interaction){
+            const {id, moment_id, user_id, negative_interaction_rate_average } = interaction
+            if (!groupedByMomentId[moment_id]) groupedByMomentId[moment_id] = []
+            const user_similarity = similarUsers.find(item => item.user_id === user_id)?.similarity || 0
+            groupedByMomentId[moment_id].push({id, user_id, negative_interaction_rate_average, similarity: user_similarity })            
+        } else return null
 
+    })
+    
     // Transformar em um array de GroupedInteractions
     const momentsInteractions = Object.entries(groupedByMomentId).map(([moment_id, interactions]) => ({
         moment_id: Number(moment_id),
