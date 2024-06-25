@@ -56,7 +56,7 @@ export async function calculeTagsWeight(processed_interactions, aditional_featur
             const momentInteraction: any = interactions_vector.find(interaction => interaction.moment_id === momentId);
 
             // Calcula a pontuação da tag para este momento multiplicando o TF-IDF pelo vetor de interações e calculando a média
-            const tagScore: any = tfidf * momentInteraction.interaction_rate;
+            const tagScore: any = tfidf * momentInteraction.interaction_rate == 0? 0 : momentInteraction.interaction_rate;
 
             // Adiciona a pontuação da tag ao array de pontuações das tags para este momento
             momentTagScores.push({ id: tagId, score: tagScore });
