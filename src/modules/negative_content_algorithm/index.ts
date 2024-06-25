@@ -104,9 +104,9 @@ export default async function negative_content_algorithm({
     })
 
     //retornar o Id do moment com o maior score
-    const momentIdWithHighestScore = scoredMoments.reduce((max, moment) => {
-        return (moment.score > max.score) ? moment : max
-    }).moment_id
-
-    return momentIdWithHighestScore
+    if(scoredMoments.length > 0){
+        return scoredMoments.reduce((max, moment) => {
+            return (moment.score > max.score) ? moment : max
+        }).moment_id       
+    } else return null
 }
