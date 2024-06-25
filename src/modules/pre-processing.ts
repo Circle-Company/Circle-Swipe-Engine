@@ -46,7 +46,7 @@ export async function pre_processing (i: InteractionQueueProps){
             encode_content_type: encodeContentType(item.type),
             normalized_duration: normalizeDuration(item.duration),
             encoded_language: encodeLanguage(item.language),
-            tags: item.tags.map((item) => {return item.id}),
+            tags: item.tags? item.tags.map((item) => {return item.id}): [],
             interaction: {
                 like: Number(item.interaction.liked),
                 share: Number(item.interaction.shared),
