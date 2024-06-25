@@ -42,22 +42,22 @@ export async function pre_processing (i: InteractionQueueProps){
     const processed_interactions = i.data.map((item) => {
         return {
             id: item.id,
-            user_id: item.user_id,
+            user_id: item.userId,
             encode_content_type: encodeContentType(item.type),
             normalized_duration: normalizeDuration(item.duration),
             encoded_language: encodeLanguage(item.language),
             tags: item.tags.map((item) => {return item.id}),
             interaction: {
-                like:item.interaction.like? 1: 0,
-                share: item.interaction.share? 1: 0,
-                click_into_moment: item.interaction.click_into_moment? 1: 0,
-                watch_time: normalizeWatchTime(item.interaction.watch_time, item.duration),
-                click_profile: item.interaction.click_profile? 1: 0,
-                comment: item.interaction.comment? 1: 0,
-                like_comment: item.interaction.like_comment? 1: 0,
-                pass_to_next: item.interaction.pass_to_next? 1: 0,
-                show_less_often: item.interaction.show_less_often? 1: 0,
-                report: item.interaction.report? 1: 0
+                like: Number(item.interaction.liked),
+                share: Number(item.interaction.shared),
+                click_into_moment: Number(item.interaction.clickIntoMoment),
+                watch_time: normalizeWatchTime(item.interaction.watchTime, item.duration),
+                click_profile: Number(item.interaction.clickProfile),
+                comment: Number(item.interaction.commented),
+                like_comment: Number(item.interaction.likeComment),
+                pass_to_next: Number(item.interaction.skipped),
+                show_less_often: Number(item.interaction.showLessOften),
+                report: Number(item.interaction.reported)
             }
         }
     })
