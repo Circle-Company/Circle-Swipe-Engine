@@ -29,13 +29,18 @@ export async function storeMomentInteraction(req: Request, res: Response){
             show_less_often: interaction.show_less_often? 1: 0,
             report: interaction.report? 1: 0
         }
+
+        const negative_interaction_rate = calcule_one_negative_interaction_rate(processed_interaction)
+        const positive_interaction_rate = calcule_one_positive_interaction_rate(processed_interaction)
+
+        console.log(negative_interaction_rate, positive_interaction_rate)
         const stored_interaction = await MomentInteraction.create({
             user_id,
             moment_owner_id,
             moment_id,
             ...interaction,
-            negative_interaction_rate: calcule_one_negative_interaction_rate(processed_interaction),
-            positive_interaction_rate: calcule_one_positive_interaction_rate(processed_interaction),
+            negative_interaction_rate,
+            positive_interaction_rate,
             created_at: new Date(),
             updated_at: new Date()
         })
