@@ -24,11 +24,13 @@ export default async function negative_content_algorithm({
     // Ordenar a lista pela similaridade em ordem decrescente
     similarUsers.sort((a, b) => b.similarity - a.similarity)
 
+    
+    let a: Array<any>
     const similarUsersInteractions = await Promise.all(
         similarUsers.map(async(user) => {
             return await Interaction.findAll({
                 where: { user_id: user.user_id },
-                attributes: ['negative_interaction_rate', 'user_id', 'moment_id']
+                attributes: ['negative_interaction_rate', 'user_id', 'moment_id', 'id']
             })
         })
     )
@@ -48,7 +50,7 @@ export default async function negative_content_algorithm({
     const interactionMap: { [key: string]: { total: number; count: number } } = {}
 
     allInteractions.forEach((interaction) => {
-        const key = `${interaction.user_id}-${interaction.moment_id}`
+        const key = `${interaction.id}-${interaction.user_id}-${interaction.moment_id}`
         if (!interactionMap[key]) interactionMap[key] = { total: 0, count: 0 }
         interactionMap[key].total += interaction.negative_interaction_rate
         interactionMap[key].count += 1
@@ -56,12 +58,14 @@ export default async function negative_content_algorithm({
 
     // Calcular a média das interações
     const averagedInteractions = Object.entries(interactionMap).map(([key, value]) => {
-        const [user_id, moment_id] = key.split('-').map(Number)
-        return {
+        const [id, user_id, moment_id] = key.split('-').map(Number)
+        if(!interacted_moments_list.includes(moment_id)) return {
+            id,
             user_id,
             moment_id,
             negative_interaction_rate_average: value.total / value.count,
         }
+        else return null
     })
 
     // Agrupar por moment_id e adicionar similaridade
@@ -91,8 +95,9 @@ export default async function negative_content_algorithm({
         const scores = moment.interactions.map((interaction) => {
             return interaction.similarity * interaction.negative_interaction_rate_average
         })
+        const ids = moment.interactions.map((interaction) => { return interaction.id })
         const score = scores.reduce((acc, val) => acc + val, 0) / scores.length
-        return { moment_id: moment.moment_id, score }
+        return { moment_id: moment.moment_id, score, interactions_ids_list: ids }
     })
 
     //retornar o Id do moment com o maior score
