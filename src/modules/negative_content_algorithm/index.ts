@@ -1,3 +1,4 @@
+import { Op } from 'sequelize'
 import Interaction from '../../models/moments/moment_interaction-model.js'
 import { InteractionQueueProps } from "../types"
 
@@ -56,6 +57,8 @@ export default async function negative_content_algorithm({
         interactionMap[key].count += 1
     });
 
+    
+
     // Calcular a média das interações
     const averagedInteractions = Object.entries(interactionMap).map(([key, value]) => {
         const [id, user_id, moment_id] = key.split('-').map(Number)
@@ -69,8 +72,7 @@ export default async function negative_content_algorithm({
     })
 
     // Agrupar por moment_id e adicionar similaridade
-    const groupedByMomentId: { [key: number]: { user_id: number, negative_interaction_rate_average: number, similarity: number }[] } = {}
-
+    const groupedByMomentId: { [key: number]: {id: number, user_id: number, negative_interaction_rate_average: number, similarity: number }[] } = {}
     averagedInteractions.forEach(interaction => {
         if(interaction){
             const {id, moment_id, user_id, negative_interaction_rate_average } = interaction
@@ -89,7 +91,6 @@ export default async function negative_content_algorithm({
 
     // Ordenar pelo moment_id
     momentsInteractions.sort((a, b) => a.moment_id - b.moment_id)
-
     /**
        multiplicar a similaridade pela negative_interaction_rate_average para ser o score
        score = similarity * negative_interaction_rate_average
