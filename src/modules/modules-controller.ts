@@ -8,6 +8,8 @@ import calculate_similarities from './calculate_similarities'
 import interaction_tags_algorithm from './interaction_tags_algorithm'
 import negative_content_algorithm from './negative_content_algorithm'
 import cold_start_algorithm from './cold_start'
+import { InteractedMomentsIdsList } from './interacted_moments_ids_list'
+import { AleatoryMomentFinder } from './aleatory_moment_finder'
 
 type ModuleControllerProps = { 
     interaction_queue: InteractionQueueProps
@@ -44,6 +46,9 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
             interacted_moments_list
         })
 
-        return [posts_from_tags, negative_post]
+        const returnMomentsList = [posts_from_tags, negative_post].filter(item => item !== null)
+
+        return await AleatoryMomentFinder({quantity: 10, interacted_moments_list})
+        //else return returnMomentsList
     }
 }
