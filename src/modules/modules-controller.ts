@@ -19,11 +19,55 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
     let userHasInteractions: boolean
 
     if(interaction_queue.data) {
-        const userInteractions = MomentInteraction.findOne({
-            where: {user_id: interaction_queue.user_id},
-        })         
-        coldStartMode = false
-        userHasInteractions = userInteractions? true : false
+        if(interaction_queue.data.length > 0) {
+            await Promise.all(interaction_queue.data.map(async (item: any) => {
+                const interaction: any = item.interaction
+                const processed_interaction = {
+                    like: Number(interaction.liked),
+                    share: Number(interaction.shared),
+                    click_into_moment: Number(interaction.clickIntoMoment),
+                    watch_time: normalizeWatchTime(interaction.watchTime, 0) /1000,
+                    click_profile: Number(interaction.clickProfile),
+                    comment: Number(interaction.commented),
+                    like_comment: Number(interaction.likeComment),
+                    pass_to_next: Number(interaction.skipped),
+                    show_less_often: Number(interaction.showLessOften),
+                    report: Number(interaction.reported)
+                }
+                const negative_interaction_rate = calcule_one_negative_interaction_rate(processed_interaction)
+                const positive_interaction_rate = calcule_one_positive_interaction_rate(processed_interaction)
+
+                console.log(negative_interaction_rate, positive_interaction_rate)
+                await MomentInteraction.create({
+                    user_id: interaction_queue.user_id,
+                    moment_owner_id: item.userId,
+                    moment_id: item.id,
+                    like: interaction.liked,
+                    share: interaction.shared,
+                    click_into_moment: interaction.clickIntoMoment,
+                    watch_time: normalizeWatchTime(interaction.watchTime, 0) /1000,
+                    click_profile: interaction.clickProfile,
+                    comment: interaction.commented,
+                    like_comment: interaction.likeComment,
+                    pass_to_next: interaction.skipped,
+                    show_less_often: interaction.showLessOften,
+                    report: interaction.reported,
+                    negative_interaction_rate: calcule_one_negative_interaction_rate(processed_interaction),
+                    positive_interaction_rate: calcule_one_positive_interaction_rate(processed_interaction),
+                    created_at: new Date(),
+                    updated_at: new Date()
+                })                
+            }))
+
+            coldStartMode = false
+            userHasInteractions = true
+        } else {
+            const userInteractions = await MomentInteraction.findOne({
+                where: {user_id: interaction_queue.user_id},
+            })
+            if(userInteractions) {userHasInteractions = true; coldStartMode = false}
+            else {userHasInteractions = false; coldStartMode = true}      
+        }
     }
     else { coldStartMode = true, userHasInteractions = false }
 
