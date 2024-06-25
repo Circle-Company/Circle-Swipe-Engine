@@ -39,7 +39,7 @@ const DB_CONFIG =
     | db_config.development
 
 DB_CONFIG.dialect = 'mysql'
-const connection =  new Sequelize({...db_config.development})
+const connection =  new Sequelize({...db_config.development, logging: false})
 
 try{
     connection.authenticate()
