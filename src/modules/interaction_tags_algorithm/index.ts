@@ -18,7 +18,8 @@ type InteractionTagsAlgorithmProps = {
 export default async function interaction_tags_algorithm({
     tags_with_weights,
     users_similarity,
-    interaction_queue
+    interaction_queue,
+    interacted_moments_list
 }: InteractionTagsAlgorithmProps): Promise<number | null> {
 
     let maxWeightTag: tagWeight | undefined
@@ -30,11 +31,13 @@ export default async function interaction_tags_algorithm({
         if (!maxWeightTag || tag.weight > maxWeightTag.weight)  maxWeightTag = tag
     })
 
-    // Busca os moments que possuem a tag de maior peso
-    const moments_with_tag = await MomentTag.findAll({
-        where: {tag_id: maxWeightTag?.tag_id },
-        attributes: ['moment_id']
-    })
+        // Busca os moments que possuem a tag de maior peso
+        const moments_with_tag = await MomentTag.findAll({
+            where: {tag_id: maxWeightTag?.tag_id, moment_id: {[Op.notIn]: interacted_moments_list}},
+            attributes: ['moment_id']
+        })
+
+        console.log('moments_with_tag: ', moments_with_tag)
 
     // Adiciona a camada de segurança que filtra moments bloqueados e deletados
     // moments_with_tag.map(moment => Number(moment.moment_id))

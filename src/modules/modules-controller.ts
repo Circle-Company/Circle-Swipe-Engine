@@ -27,6 +27,7 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
 
     if(coldStartMode) return await cold_start_algorithm()
     else {
+        const interacted_moments_list = await InteractedMomentsIdsList({user_id: interaction_queue.user_id})
         const calculated_similarities = await calculate_similarities()
         const processed_interactions = await pre_processing(interaction_queue)
         const aditional_features = await positive_interaction_rate(processed_interactions)
@@ -34,12 +35,14 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
         const posts_from_tags = await interaction_tags_algorithm({
             tags_with_weights,
             users_similarity: calculated_similarities.users_similarity,
-            interaction_queue
+            interaction_queue,
+            interacted_moments_list
         })
         const negative_post = await negative_content_algorithm({
             users_similarity: calculated_similarities.users_similarity,
-            interaction_queue
-        }) 
+            interaction_queue,
+            interacted_moments_list
+        })
 
         return [posts_from_tags, negative_post]
     }

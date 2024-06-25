@@ -4,10 +4,11 @@ import { InteractionQueueProps } from "../types"
 type NegativeContentAlgorithmProps = {
     users_similarity: Array<Array<number>>
     interaction_queue: InteractionQueueProps
+    interacted_moments_list: Array<number>
 }
 
 export default async function negative_content_algorithm({
-    users_similarity, interaction_queue
+    users_similarity, interaction_queue, interacted_moments_list
 }: NegativeContentAlgorithmProps): Promise<any> {
     // Ajustar o índice para zero-based
     const zeroIndex = interaction_queue.user_id - 1
@@ -31,9 +32,18 @@ export default async function negative_content_algorithm({
             })
         })
     )
-
-    const allInteractions = similarUsersInteractions.flat()
-
+    a = similarUsersInteractions
+    let genericInteractionsLimitNum = 50 - similarUsersInteractions.length
+    if(a.length < 50) {
+        const similarUsersInteractionsIdsList = similarUsersInteractions.map((i) => { return  i.map((i) => i.id) })
+        const unknownInteractions = await Interaction.findAll({
+            where: { id: {[Op.notIn]: similarUsersInteractionsIdsList.concat(interacted_moments_list)}},
+            attributes: ['negative_interaction_rate', 'user_id', 'moment_id', 'id'],
+            limit: genericInteractionsLimitNum
+        })
+        a = a.concat(unknownInteractions)
+    }
+    const allInteractions = a.flat()
     // Agrupar as interações por user_id e moment_id
     const interactionMap: { [key: string]: { total: number; count: number } } = {}
 
