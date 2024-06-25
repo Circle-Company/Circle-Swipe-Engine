@@ -11,7 +11,7 @@ export interface InteractionQueueProps {
 
 export interface MomentInteractionProps {
     id: number,
-    user_id: number,
+    userId: number,
     tags: TagsProps[],
     duration: number,
     type: "IMAGE" | "VIDEO",
@@ -20,16 +20,16 @@ export interface MomentInteractionProps {
 }
 
 interface InteractionProps {
-    like: boolean,
-    share: boolean,
-    click_into_moment: boolean,
-    watch_time: number,
-    click_profile: boolean,
-    comment: boolean,
-    like_comment: boolean,
-    pass_to_next: boolean,
-    show_less_often: boolean,
-    report: boolean
+    liked: boolean,
+    shared: boolean,
+    clickIntoMoment: boolean,
+    watchTime: number,
+    clickProfile: boolean,
+    commented: boolean,
+    likeComment: boolean,
+    skipped: boolean,
+    showLessOften: boolean,
+    reported: boolean
 }
 
 export interface TagsProps {
