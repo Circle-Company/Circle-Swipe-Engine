@@ -73,7 +73,9 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
 
     if(coldStartMode) return await cold_start_algorithm()
     else {
+        
         const interacted_moments_list = await InteractedMomentsIdsList({user_id: interaction_queue.user_id})
+        /** 
         const calculated_similarities = await calculate_similarities()
         const processed_interactions = await pre_processing(interaction_queue)
         const aditional_features = await positive_interaction_rate(processed_interactions)
@@ -92,7 +94,7 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
         })
 
         const returnMomentsList = [posts_from_tags, negative_post].filter(item => item !== null)
-
+*/
         return await AleatoryMomentFinder({quantity: 10, interacted_moments_list})
         //else return returnMomentsList
     }
