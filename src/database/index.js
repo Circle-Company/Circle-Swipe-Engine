@@ -31,23 +31,22 @@ const Skip = require('../models/moments/skip-model.js');
 const ProfileClick = require('../models/moments/profile_click-model.js');
 const MomentInteraction = require('../models/moments/moment_interaction-model.js')
 
+let DB_CONFIG
 
-const DB_CONFIG =
-    CONFIG.NODE_ENV === 'development'? db_config.development: db_config.development
-    | CONFIG.NODE_ENV === 'production'? db_config.production: db_config.development
-    | CONFIG.NODE_ENV === 'test'? db_config.test: db_config.test
-    | db_config.development
+if(CONFIG.default.NODE_ENV === 'development') DB_CONFIG = db_config.development
+else if(CONFIG.default.NODE_ENV === 'test') DB_CONFIG = db_config.test
+else if(CONFIG.default.NODE_ENV === 'production') DB_CONFIG = db_config.production
+else DB_CONFIG = db_config.development
 
-DB_CONFIG.dialect = 'mysql'
-const connection =  new Sequelize({...db_config.development, logging: false})
+console.log(CONFIG.default.NODE_ENV, DB_CONFIG)
 
+const connection =  new Sequelize(DB_CONFIG)
 try{
     connection.authenticate()
     console.log('connection has been established successfully.')
 } catch(err) {
     console.error('unable to connect to database: ', err)
 }
-
 //models connections
 User.init(connection)
 Metadata.init(connection)
