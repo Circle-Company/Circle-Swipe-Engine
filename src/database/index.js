@@ -38,8 +38,6 @@ else if(CONFIG.default.NODE_ENV === 'test') DB_CONFIG = db_config.test
 else if(CONFIG.default.NODE_ENV === 'production') DB_CONFIG = db_config.production
 else DB_CONFIG = db_config.development
 
-console.log(CONFIG.default.NODE_ENV, DB_CONFIG)
-
 const connection =  new Sequelize(DB_CONFIG)
 try{
     connection.authenticate()
