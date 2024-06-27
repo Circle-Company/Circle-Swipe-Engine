@@ -23,7 +23,10 @@ const db_environment = {
     username: process.env.PRODUCTION_DB_USERNAME,
     password: process.env.PRODUCTION_DB_PASSWORD,
     database: process.env.PRODUCTION_DB_NAME,
-    define: { timestamps: true, underscored: true }
+    define: { timestamps: true, underscored: true },
+    maxConcurrentQueries: 100,
+    pool: { maxConnections: 5, maxIdleTime: 30},
+    language: 'en',
   }
 }
 
