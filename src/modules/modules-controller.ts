@@ -44,7 +44,6 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
                 const negative_interaction_rate = calcule_one_negative_interaction_rate(processed_interaction)
                 const positive_interaction_rate = calcule_one_positive_interaction_rate(processed_interaction)
 
-                console.log(negative_interaction_rate, positive_interaction_rate)
                 await MomentInteraction.create({
                     user_id: interaction_queue.user_id,
                     moment_owner_id: item.userId,
