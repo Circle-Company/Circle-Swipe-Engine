@@ -1,11 +1,14 @@
 version: "3"
 services:
-  myapp:
-    build: .
-    command: npm start
+  circle-swipe-engine:
+    image: circle-swipe-engine
+    build:
+        context: .
+        dockerfile: Dockerfile
+    command: npm run start
     ports:
       - "5000:5000"
     environment:
       - NODE_ENV=production
-    volumes:
-      - .:/usr/app
+    env_file:
+      - .env
