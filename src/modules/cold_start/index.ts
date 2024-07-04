@@ -34,7 +34,7 @@ export default async function cold_start_algorithm(): Promise<number[]> {
         // Calcular a média de positive_interaction_rate para o momento atual
         const interactionCount = interactions.length
         const totalInteractionRate = interactions.reduce((sum, interaction) => sum + interaction.positive_interaction_rate, 0)
-        const averageInteractionRate = interactionCount > 0 ? totalInteractionRate / interactionCount : 0
+        const averageInteractionRate = interactionCount > 0 ? totalInteractionRate / interactionCount : 1
         return { moment_id, score: averageInteractionRate }
     })
 
