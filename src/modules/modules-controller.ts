@@ -1,4 +1,11 @@
 import MomentInteraction from '../models/moments/moment_interaction-model.js'
+import MomentShare from '../models/moments/share-model.js'
+import MomentClick from '../models/moments/profile_click-model.js'
+import MomentView from '../models/moments/view-model.js'
+import MomentSkip from '../models/moments/skip-model.js'
+
+import MomentStatistic from '../models/moments/moment_statistic-model.js'
+import UserStatistic from '../models/user/statistic-model.js'
 
 import { normalizeWatchTime, pre_processing } from './pre-processing'
 import { calcule_one_negative_interaction_rate, calcule_one_positive_interaction_rate, positive_interaction_rate } from './positive_interaction_rate'
