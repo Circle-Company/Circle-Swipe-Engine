@@ -56,7 +56,24 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
                     positive_interaction_rate: calcule_one_positive_interaction_rate(processed_interaction),
                     created_at: new Date(),
                     updated_at: new Date()
-                })                
+                })
+
+                if(interaction.shared) {
+                    MomentStatistic.increment('total_shares_num', { by: 1, where: { moment_id: item.id }})
+                    MomentShare.create({ user_id:interaction_queue.user_id, shared_moment_id: item.id })
+                }
+                if(interaction.clickProfile) {
+                    UserStatistic.increment('total_profile_views_num', { by: 1, where: { user_id: item.userId }})
+                    MomentStatistic.increment('total_profile_clicks_num', { by: 1, where: { moment_id: item.id }})
+                    MomentClick.create({ user_id:interaction_queue.user_id, profile_clicked_moment_id: item.id })
+                }
+                if(interaction.skipped) MomentSkip.create({ user_id:interaction_queue.user_id, skipped_moment_id: item.id })
+                else {
+                    UserStatistic.increment('total_views_num', { by: 1, where: { user_id: item.userId }})
+                    MomentStatistic.increment('total_views_num', { by: 1, where: { moment_id: item.id }})
+                    MomentView.create({ user_id:interaction_queue.user_id, viewed_moment_id: item.id })
+                }
+                
             }))
 
             coldStartMode = false
