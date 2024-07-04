@@ -41,8 +41,6 @@ export async function Modules_Controller({interaction_queue}:ModuleControllerPro
                     show_less_often: Number(interaction.showLessOften),
                     report: Number(interaction.reported)
                 }
-                const negative_interaction_rate = calcule_one_negative_interaction_rate(processed_interaction)
-                const positive_interaction_rate = calcule_one_positive_interaction_rate(processed_interaction)
 
                 await MomentInteraction.create({
                     user_id: interaction_queue.user_id,
