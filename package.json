@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": " node src/connection/server/index.ts",
+    "start:dev": " tsx src/connection/server/index.ts",
     "start:dev:watch": " nodemon src/connection/server/index.ts",
     "build": "npx tsc",
     "start": " node build/connection/server/index.js"
@@ -29,6 +29,8 @@
     "http-status-codes": "^2.3.0",
     "mysql2": "^3.9.3",
     "natural": "^6.10.4",
-    "sequelize": "^6.7.0"
+    "sequelize": "^6.7.0",
+    "tsup": "^8.1.0",
+    "tsx": "^4.16.2"
   }
 }
